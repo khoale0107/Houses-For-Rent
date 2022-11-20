@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "90909373322",
+    "project_id": "project-ck-99d6e",
+    "storage_bucket": "project-ck-99d6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90909373322:android:a8344e644f4206f75e0e73",
+        "android_client_info": {
+          "package_name": "com.example.housesforrent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90909373322-pj09i4iaicvb2lp7pu52bm226ib8hqdc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxpTft2J-sTngDgEGI0cEzFVK6m3i6ebQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90909373322-pj09i4iaicvb2lp7pu52bm226ib8hqdc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
