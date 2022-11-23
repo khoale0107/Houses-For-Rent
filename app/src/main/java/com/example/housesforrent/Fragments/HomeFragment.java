@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.housesforrent.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class HomeFragment extends Fragment {
@@ -24,9 +26,12 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setText("1233123 obama");
+
+        if (user != null) {
+            tvTitle.setText(user.getEmail());
+        }
 
 
         return view;
