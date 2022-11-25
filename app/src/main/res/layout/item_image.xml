@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:backgroundTint="@android:color/transparent"
+    android:padding="6dp"
+    android:background="#e2e3eb">
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/btnRemoveImage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignEnd="@+id/ivImage"
+        android:background="#E8ECE2E2"
+        android:gravity="center"
+        android:text="X" />
+</RelativeLayout>

@@ -73,6 +73,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(getContext(), "Signed out", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), LoginActivity.class);
                             startActivity(intent);
+
                         }
                     });
         }

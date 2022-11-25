@@ -18,7 +18,6 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tìm trọ");
 
-
     }
 
     @Override

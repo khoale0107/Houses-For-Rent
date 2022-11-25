@@ -80,8 +80,14 @@ public class LoginActivity extends AppCompatActivity {
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
-            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@", String.valueOf(response.getError().getErrorCode()));
-            Toast.makeText(this,  response.getError().getStackTrace().toString(), Toast.LENGTH_SHORT).show();
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@", String.valueOf(response.getError().getMessage()));
+            Toast.makeText(this,  String.valueOf(response.getError().getErrorCode()), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

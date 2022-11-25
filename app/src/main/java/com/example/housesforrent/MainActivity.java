@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
 //                        loadFragment(new ProfileFragment());
                     Intent intent = new Intent(MainActivity.this, PostActivity.class);
                     startActivityForResult(intent, POST_ACTIVITY_REQUEST);
+                    return false;
 
-                    break;
                 case R.id.menu_message:
                     loadFragment(new MessageFragment());
                     break;
@@ -123,15 +123,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-//    void navigateToSecondActivity(){
-//        finish();
-//        Intent intent = new Intent(MainActivity.this,SecondActivity.class);
-//        startActivity(intent);
-//    }
-
-
-
-
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, fragment);
@@ -147,5 +138,10 @@ public class MainActivity extends AppCompatActivity {
         if (isHomeFragment)
             super.onBackPressed();
         mBottomNavigationView.setSelectedItemId(R.id.menu_home);
+    }
+
+
+    public MainActivity getInstance() {
+        return this;
     }
 }

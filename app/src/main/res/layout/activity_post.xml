@@ -84,7 +84,7 @@
             />
 
         <EditText
-            android:id="@+id/etMoTa"
+            android:id="@+id/etMota"
             android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -95,6 +95,19 @@
             android:padding="10dp"
             android:gravity="top"
             />
+
+
+        <Button
+            android:id="@+id/btnSelectImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Chọn ảnh"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
