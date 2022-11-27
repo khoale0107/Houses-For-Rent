@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:minWidth="10000dp"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn quận"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        >
+        <RadioButton
+            android:id="@+id/rd1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 1"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 2"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 3"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 4"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 5"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 6"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 7"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 8"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 9"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 10"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 11"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận 11"
+            android:textSize="@dimen/dp20"/>
+    </RadioGroup>
+</LinearLayout>

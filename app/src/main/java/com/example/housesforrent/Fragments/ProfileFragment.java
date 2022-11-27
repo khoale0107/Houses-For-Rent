@@ -14,8 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.housesforrent.LoginActivity;
 import com.example.housesforrent.MainActivity;
+import com.example.housesforrent.MyUtilities.DownloadImageFromInternet;
 import com.example.housesforrent.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,8 +50,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            ivAvatar.setImageURI(null);
-            ivAvatar.setImageURI(user.getPhotoUrl());
+            Glide.with(this).load(user.getPhotoUrl().toString()).into(ivAvatar);
+
             tvDisplayName.setText(user.getDisplayName());
 //            tvID.setText(user.getUid());
             tvID.setText(user.getEmail());
@@ -58,7 +60,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
 
         btnLogout.setOnClickListener(this);
-
         return view;
     }
 
@@ -73,13 +74,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(getContext(), "Signed out", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), LoginActivity.class);
                             startActivity(intent);
-
+                            getActivity().finish();
                         }
                     });
         }
 
-        else if (1 == 1) {
-
-        }
     }
 }

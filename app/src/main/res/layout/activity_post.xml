@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,10 +14,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btnSelectImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Chọn ảnh"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tiêu đề"
+            android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             />
@@ -32,7 +45,46 @@
             android:background="#309C9C9C"
             android:hint="Nhập tiêu đề"
             android:padding="10dp"
+            />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thành phố"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@+id/etThanhPho"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="#309C9C9C"
+            android:hint="Chọn thành phố"
+            android:padding="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quận"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@+id/etQuan"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="#309C9C9C"
+            android:hint="Chọn quận"
+            android:padding="10dp"
             />
 
         <TextView
@@ -58,22 +110,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Địa chỉ"
+            android:text="Diện tích"
             android:textColor="@color/black"
             android:textSize="18sp"
             />
 
         <EditText
-            android:id="@+id/etDiaChi"
-            android:inputType="text"
+            android:id="@+id/etDienTich"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:background="#309C9C9C"
-            android:hint="Nhập địa chỉ"
+            android:hint="Nhập diện tích"
             android:padding="10dp"
             />
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,19 +151,9 @@
             />
 
 
-        <Button
-            android:id="@+id/btnSelectImages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Chọn ảnh"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

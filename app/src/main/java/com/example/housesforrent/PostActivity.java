@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ClipData;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.housesforrent.Adapters.PostImageAdapter;
@@ -29,11 +31,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,12 @@ public class PostActivity extends AppCompatActivity {
     EditText etTieuDe;
     EditText etGia;
     EditText etMota;
-    EditText etDiaChi;
+    EditText etThanhPho;
+    EditText etQuan;
+    EditText etDienTich;
+
+    Dialog dialogSelectCity;
+    Dialog dialogSelectDistrict;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +58,32 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Cho thuê trọ");
+        initDialogThanhPho();
 
         btnSelectImages = findViewById(R.id.btnSelectImages);
         rvRV = findViewById(R.id.rvRV);
         etTieuDe = findViewById(R.id.etTieuDe);
         etGia = findViewById(R.id.etGia);
         etMota = findViewById(R.id.etMota);
-        etDiaChi = findViewById(R.id.etDiaChi);
+        etThanhPho = findViewById(R.id.etThanhPho);
+        etQuan = findViewById(R.id.etQuan);
+        etDienTich = findViewById(R.id.etDienTich);
+
+        etThanhPho.setOnFocusChangeListener(onFocusChangeListener);
+        etThanhPho.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogSelectCity.show();
+            }
+        });
+
+        etQuan.setOnFocusChangeListener(onFocusChangeListener);
+        etQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSelectDistrictDialog();
+            }
+        });
 
         List<Uri> imageList = new ArrayList<>();
         postImageAdapter = new PostImageAdapter(new ArrayList<Uri>());
@@ -78,6 +101,107 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
+
+
+//############################################################################################################################################
+
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean enterFocus) {
+            if (enterFocus) {
+                if (view.getId() == R.id.etThanhPho) dialogSelectCity.show();
+                if (view.getId() == R.id.etQuan) showSelectDistrictDialog();
+            }
+        }
+    };
+
+    private void showSelectDistrictDialog() {
+        if (etThanhPho.getText().toString().isEmpty()) {
+            Toast.makeText(PostActivity.this, "Hãy chọn thành phố", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        dialogSelectDistrict.show();
+    }
+
+    //################################# CREATE SELECT CITY DIALOG #############################################
+    private void initDialogThanhPho() {
+        dialogSelectCity = new Dialog(this);
+        dialogSelectCity.setContentView(R.layout.dialog_select_city);
+
+        CompoundButton.OnCheckedChangeListener onSelectedPlaceListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    etThanhPho.setText(compoundButton.getText());
+                    etThanhPho.clearFocus();
+                    etThanhPho.setError(null);
+                    etQuan.setText("");
+                    dialogSelectCity.dismiss();
+
+                    initDialogDistrict();
+                }
+            }
+        };
+
+        RadioButton rd1 = dialogSelectCity.findViewById(R.id.rd1);
+        RadioButton rd2 = dialogSelectCity.findViewById(R.id.rd2);
+
+        rd1.setOnCheckedChangeListener(onSelectedPlaceListener);
+        rd2.setOnCheckedChangeListener(onSelectedPlaceListener);
+    }
+
+    //################################# CREATE SELECT DISTRICT DIALOG #############################################
+    private void initDialogDistrict() {
+        dialogSelectDistrict = new Dialog(this);
+
+        String city = etThanhPho.getText().toString();
+
+        if (city.equals("Hồ Chí Minh")) {
+            dialogSelectDistrict.setContentView(R.layout.dialog_select_district_1);
+        }
+        else if (city.equals("Hà Nội")) {
+            dialogSelectDistrict.setContentView(R.layout.dialog_select_district_2);
+        }
+        else {
+            Toast.makeText(this, "Có lỗi 111", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        CompoundButton.OnCheckedChangeListener onSelectedDistrictListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    etQuan.setText(compoundButton.getText());
+                    etQuan.clearFocus();
+                    etQuan.setError(null);
+                    dialogSelectDistrict.dismiss();
+                }
+            }
+        };
+
+        RadioButton rd1 = dialogSelectDistrict.findViewById(R.id.rd1);
+        RadioButton rd2 = dialogSelectDistrict.findViewById(R.id.rd2);
+        RadioButton rd3 = dialogSelectDistrict.findViewById(R.id.rd3);
+        RadioButton rd4 = dialogSelectDistrict.findViewById(R.id.rd4);
+        RadioButton rd5 = dialogSelectDistrict.findViewById(R.id.rd5);
+        RadioButton rd6 = dialogSelectDistrict.findViewById(R.id.rd6);
+        RadioButton rd7 = dialogSelectDistrict.findViewById(R.id.rd7);
+        RadioButton rd8 = dialogSelectDistrict.findViewById(R.id.rd8);
+        RadioButton rd9 = dialogSelectDistrict.findViewById(R.id.rd9);
+        RadioButton rd10 = dialogSelectDistrict.findViewById(R.id.rd10);
+
+        rd1.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd2.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd3.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd4.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd5.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd6.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd7.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd8.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd9.setOnCheckedChangeListener(onSelectedDistrictListener);
+        rd10.setOnCheckedChangeListener(onSelectedDistrictListener);
+    }
+
     //############################# OPTION MENU #####################################################################################################################
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,6 +213,32 @@ public class PostActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_add_new_post) {
+
+            if (etTieuDe.getText().toString().isEmpty()) {
+                etTieuDe.setError("Hãy nhập tiêu đề.");
+                return false;
+            }
+            if (etThanhPho.getText().toString().isEmpty()) {
+                etThanhPho.setError("Hãy nhập tiêu đề.");
+                return false;
+            }
+            if (etQuan.getText().toString().isEmpty()) {
+                etQuan.setError("Hãy nhập tiêu đề.");
+                return false;
+            }
+            if (etGia.getText().toString().isEmpty()) {
+                etGia.setError("Hãy nhập tiêu đề.");
+                return false;
+            }
+            if (etDienTich.getText().toString().isEmpty()) {
+                etDienTich.setError("Hãy nhập tiêu đề.");
+                return false;
+            }
+            if (postImageAdapter.imagesList.isEmpty()) {
+                Toast.makeText(this, "Hãy chọn ảnh", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
             insertNewPost();
         }
 
@@ -122,6 +272,7 @@ public class PostActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    //######################################## UPLOAD NEW POST #####################################################################
     public void insertNewPost() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -133,18 +284,18 @@ public class PostActivity extends AppCompatActivity {
             imageList.add(i);
         }
 
-
-
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("tieude", etTieuDe.getText().toString());
-        newUser.put("gia", Integer.parseInt(etGia.getText().toString()));
+        newUser.put("gia", Long.parseLong(etGia.getText().toString()));
         newUser.put("mota", etMota.getText().toString());
-        newUser.put("diachi", etDiaChi.getText().toString());
-        newUser.put("author", user.getEmail());
+        newUser.put("dientich", Long.parseLong(etDienTich.getText().toString()));
+        newUser.put("onwer", user.getEmail());
+        newUser.put("thanhpho", etThanhPho.getText().toString());
+        newUser.put("quan", etQuan.getText().toString());
+        newUser.put("valid", 0);
         newUser.put("images", imageList);
         newUser.put("time", Timestamp.now());
 
-        String postId;
         db.collection("posts")
                 .add(newUser)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -165,11 +316,6 @@ public class PostActivity extends AppCompatActivity {
                         Log.d("", "Error adding document", e);
                     }
                 });
-
-
-    }
-
-    private void uploadImagesToPost() {
 
 
     }

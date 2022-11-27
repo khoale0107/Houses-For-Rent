@@ -2,6 +2,7 @@ package com.example.housesforrent;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,15 +16,24 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     Button btnLoginWithGoogle;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLoginWithGoogle = findViewById(R.id.btnLoginWithGoogle);
 
         getSupportActionBar().hide();
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
@@ -41,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
+        
+        //######################  1. You click this btn ##########################################################################3
         btnLoginWithGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
+    
+    //########################################## 2. This pops up #########################################################################
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -67,10 +79,34 @@ public class LoginActivity extends AppCompatActivity {
             }
     );
 
+    
+    //######################################### 3. You signed in (or not) ############################################################
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
+        
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
+
+            DocumentReference usersRef = db.collection("users").document(user.getEmail());
+            usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+
+                        } else {
+                            //######################################## 4. You signed in for the first time ########################################
+                            registerNewUser();
+                        }
+                    } else {
+
+                    }
+                }
+            });
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
 
@@ -83,6 +119,31 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@", String.valueOf(response.getError().getMessage()));
             Toast.makeText(this,  String.valueOf(response.getError().getErrorCode()), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void registerNewUser() {
+        // Create a new user with a first and last name
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", user.getEmail());
+        newUser.put("pfp", user.getPhotoUrl().toString());
+
+        db.collection("users").document(user.getEmail())
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                        Toast.makeText(LoginActivity.this, "First time 2222", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error writing document", e);
+                    }
+                });
     }
 
     @Override

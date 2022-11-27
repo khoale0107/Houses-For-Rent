@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_home:
-//                        mViewPager2.setCurrentItem(0);
                     loadFragment(new HomeFragment());
                     isHomeFragment = true;
                     break;
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new BookMarkFragment());
                     break;
                 case R.id.menu_post:
-//                        loadFragment(new ProfileFragment());
                     Intent intent = new Intent(MainActivity.this, PostActivity.class);
                     startActivityForResult(intent, POST_ACTIVITY_REQUEST);
                     return false;
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_search) {
-//            Toast.makeText(this, "menu add worked", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         }
@@ -109,18 +106,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        if(requestCode == 1000){
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//
-//            try {
-//                task.getResult(ApiException.class);
-//                navigateToSecondActivity();
-//            } catch (ApiException e) {
-//                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-//                Log.e("@@@", e.getStatus().getStatusMessage());
-//            }
-//        }
     }
 
     private void loadFragment(Fragment fragment) {

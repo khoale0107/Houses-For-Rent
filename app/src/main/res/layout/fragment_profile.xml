@@ -59,6 +59,16 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnMyPost"
+            android:drawableLeft="@drawable/icon_logout"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phòng trọ đã đăng"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            />
 
         <Button
             android:id="@+id/btnLogout"

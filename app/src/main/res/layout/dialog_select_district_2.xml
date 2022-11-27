@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:minWidth="10000dp"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn quận"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        >
+        <RadioButton
+            android:id="@+id/rd1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ba Đình"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thanh Xuân"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hoàn Kiếm"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đống Đa"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nam Từ Liêm"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bắc Từ Liêm"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hoàng Mai"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cầu Giấy"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hai Bà Trưng"
+            android:textSize="@dimen/dp20"/>
+
+        <RadioButton
+            android:id="@+id/rd10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hà Đông"
+            android:textSize="@dimen/dp20"/>
+
+
+    </RadioGroup>
+</LinearLayout>
