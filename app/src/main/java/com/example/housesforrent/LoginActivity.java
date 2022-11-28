@@ -80,14 +80,13 @@ public class LoginActivity extends AppCompatActivity {
     );
 
     
-    //######################################### 3. You signed in (or not) ############################################################
+    //######################################### 3. You signed in ############################################################
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
 
             DocumentReference usersRef = db.collection("users").document(user.getEmail());
             usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -96,7 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-
+                            User.getInstance().setAvatarURL(document.getString("pfp"));
+                            User.getInstance().setDisplayName(document.getString("displayname"));
+                            User.getInstance().setEmail(document.getString("email"));
+                            User.getInstance().setPhoneNumber(document.getString("phone"));
                         } else {
                             //######################################## 4. You signed in for the first time ########################################
                             registerNewUser();
@@ -112,22 +114,21 @@ public class LoginActivity extends AppCompatActivity {
 
             finish();
         } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
+            // Sign in failed. If response is null the user canceled the sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            // ...
-            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@", String.valueOf(response.getError().getMessage()));
             Toast.makeText(this,  String.valueOf(response.getError().getErrorCode()), Toast.LENGTH_SHORT).show();
         }
     }
 
+    //user log in for the first time
     private void registerNewUser() {
-        // Create a new user with a first and last name
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("email", user.getEmail());
         newUser.put("pfp", user.getPhotoUrl().toString());
+        newUser.put("displayname", user.getDisplayName());
+        newUser.put("phone", "");
 
         db.collection("users").document(user.getEmail())
                 .set(newUser)

@@ -289,7 +289,7 @@ public class PostActivity extends AppCompatActivity {
         newUser.put("gia", Long.parseLong(etGia.getText().toString()));
         newUser.put("mota", etMota.getText().toString());
         newUser.put("dientich", Long.parseLong(etDienTich.getText().toString()));
-        newUser.put("onwer", user.getEmail());
+        newUser.put("owner", user.getEmail());
         newUser.put("thanhpho", etThanhPho.getText().toString());
         newUser.put("quan", etQuan.getText().toString());
         newUser.put("valid", 0);
@@ -297,25 +297,25 @@ public class PostActivity extends AppCompatActivity {
         newUser.put("time", Timestamp.now());
 
         db.collection("posts")
-                .add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        for (int i = 0; i < postImageAdapter.imagesList.size(); i++) {
-                            StorageReference imageRef = storageRef.child("post-resources/" + documentReference.getId() + "/" + i);
-                            imageRef.putFile(postImageAdapter.imagesList.get(i));
-                        }
+            .add(newUser)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    for (int i = 0; i < postImageAdapter.imagesList.size(); i++) {
+                        StorageReference imageRef = storageRef.child("post-resources/" + documentReference.getId() + "/" + i);
+                        imageRef.putFile(postImageAdapter.imagesList.get(i));
+                    }
 
-                        finish();
-                        Toast.makeText(PostActivity.this, "Đã thêm phòng trọ", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("", "Error adding document", e);
-                    }
-                });
+                    finish();
+                    Toast.makeText(PostActivity.this, "Đã thêm phòng trọ", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("", "Error adding document", e);
+                }
+            });
 
 
     }

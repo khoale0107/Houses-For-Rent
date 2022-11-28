@@ -43,11 +43,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvDienTich.setText(post.getDienTich() + "m2");
         holder.tvGia.setText(post.getGia() + " đồng/tháng");
         holder.tvDiaChi.setText(post.getDiaChi());
-//        holder.ivThumbnail.setImageResource(R.mipmap.ic_launcher);
 
         Glide.with(holder.ivThumbnail.getContext()).load(post.getThumnailURL()).into(holder.ivThumbnail);
-
-//        new MainActivity.DownloadImageFromInternet(holder.ivImage).execute(nhaTro.getUrl());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +52,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 Intent intent = new Intent(context, PostDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("postID", post.getID());
+                bundle.putString("owner", post.getOwner());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

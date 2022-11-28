@@ -7,6 +7,15 @@ public class Post {
     String dienTich;
     String thumnailURL;
     String diaChi;
+    String owner;
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     public String getThumnailURL() {
         return thumnailURL;
@@ -25,12 +34,13 @@ public class Post {
         this.diaChi = diaChi;
     }
 
-    public Post(String ID, String tieuDe, String gia, String dienTich, String diaChi) {
+    public Post(String ID, String tieuDe, String gia, String dienTich, String diaChi, String owner) {
         this.ID = ID;
         this.tieuDe = tieuDe;
         this.gia = gia;
         this.dienTich = dienTich;
         this.diaChi = diaChi;
+        this.owner = owner;
     }
 
     public String getID() {

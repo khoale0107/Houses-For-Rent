@@ -50,21 +50,19 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        List<Post> list = new ArrayList<>();
-
-//        list.add(new Post("123", "tieu dé", "22", "33"));
-
         rvRV = view.findViewById(R.id.rvRV);
-        postAdapter = new PostAdapter(list, getContext());
+        postAdapter = new PostAdapter(new ArrayList<>(), getContext());
         rvRV.setAdapter(postAdapter);
         rvRV.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //load content
         db.collection("posts")
                 .orderBy("time", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
 
+                        //load posts
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
@@ -75,7 +73,8 @@ public class HomeFragment extends Fragment {
                                             doc.getString("tieude"),
                                             String.format("%,d", doc.getLong("gia")),
                                             doc.getLong("dientich").toString(),
-                                            doc.getString("quan") + ", " + doc.getString("thanhpho")
+                                            doc.getString("quan") + ", " + doc.getString("thanhpho"),
+                                            doc.getString("owner")
                                     );
 
                                     postAdapter.postList.add(0, post);
@@ -86,6 +85,7 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
+                        //load Thumnail
                         for (Post p : postAdapter.postList) {
                             StorageReference imageRef = storageRef.child("post-resources/" + p.getID() + "/" + 0);
                             imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
