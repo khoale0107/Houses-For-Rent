@@ -8,6 +8,24 @@ public class Post {
     String thumnailURL;
     String diaChi;
     String owner;
+    Boolean bookMarked;
+    int trangThai;
+
+    public int getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public Boolean getBookMarked() {
+        return bookMarked;
+    }
+
+    public void setBookMarked(Boolean bookMarked) {
+        this.bookMarked = bookMarked;
+    }
 
     public String getOwner() {
         return owner;

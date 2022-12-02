@@ -47,7 +47,7 @@
 
         <EditText
             android:id="@+id/etPhoneNumber"
-            android:inputType="text"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <Button
-        android:enabled="false"
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cập nhật"/>

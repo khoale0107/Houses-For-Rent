@@ -6,9 +6,9 @@
     tools:context=".Fragments.BookMarkFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hello bookmark fragment" />
+        android:id="@+id/rvRV"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

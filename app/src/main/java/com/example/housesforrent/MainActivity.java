@@ -69,6 +69,17 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new BookMarkFragment());
                     break;
                 case R.id.menu_post:
+                    String phoneNumber = User.getInstance().getPhoneNumber();
+
+                    if (phoneNumber != null) {
+                        if (phoneNumber.isEmpty()) {
+                            Toast.makeText(MainActivity.this, "Bạn cần cập nhật số điện thoại", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                            startActivity(intent);
+                            return false;
+                        }
+                    }
+
                     Intent intent = new Intent(MainActivity.this, PostActivity.class);
                     startActivityForResult(intent, POST_ACTIVITY_REQUEST);
                     return false;

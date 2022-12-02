@@ -1,23 +1,24 @@
 package com.example.housesforrent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.housesforrent.Fragments.MessageFragment;
-import com.example.housesforrent.MyUtilities.DownloadImageFromInternet;
 import com.example.housesforrent.ViewPagers.PostDetailImagesViewPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,19 +32,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends AppCompatActivity {
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tvTieuDe;
     TextView tvMoTa;
     TextView tvDienTich;
     TextView tvDiaChi;
     TextView tvGia;
     TextView tvUserDisplayName;
+    TextView tvPhoneNumber;
+    Button btnPhoneCall;
     ImageView ivUserAvatar;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -60,6 +63,7 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Chi tiết phòng trọ");
 
         tvTieuDe = findViewById(R.id.tvTieuDe);
         tvMoTa = findViewById(R.id.tvMoTa);
@@ -68,21 +72,24 @@ public class PostDetailActivity extends AppCompatActivity {
         tvGia = findViewById(R.id.tvGia);
         tvUserDisplayName = findViewById(R.id.tvUserDisplayName);
         ivUserAvatar = findViewById(R.id.ivUserAvatar);
+        tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
+        btnPhoneCall = findViewById(R.id.btnCall);
+
+        btnPhoneCall.setOnClickListener(this);
 
         Intent intent = getIntent();
         postID = intent.getStringExtra("postID");
         ownerEmail = intent.getStringExtra("owner");
 
-        // Initializing the ViewPager Object
-        mViewPager = (ViewPager)findViewById(R.id.vpViewPager);
-
-        // Initializing the ViewPagerAdapter
         postDetailImagesViewPagerAdapter = new PostDetailImagesViewPagerAdapter(PostDetailActivity.this, imageURLs);
-
-        // Adding the Adapter to the ViewPager
+        mViewPager = findViewById(R.id.vpViewPager);
         mViewPager.setAdapter(postDetailImagesViewPagerAdapter);
 
-        //load content
+        loadPostContent();
+        loadOwnerInfo();
+    }
+
+    private void loadPostContent() {
         db.collection("posts").document(postID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -121,7 +128,6 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        loadOwnerInfo();
     }
 
     //load owner info
@@ -134,6 +140,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         tvUserDisplayName.setText(document.getString("displayname"));
+                        tvPhoneNumber.setText(document.getString("phone"));
                         Glide.with(PostDetailActivity.this)
                                 .load(document.getString("pfp"))
                                 .into(ivUserAvatar);
@@ -147,9 +154,77 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
+    //################################### CREATE OPTION MENU ###########################################################3
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        String ownerEmail = getIntent().getStringExtra("owner");
+        if (user.getEmail().equals(ownerEmail)) {
+            getMenuInflater().inflate(R.menu.menu_post_detail_activity, menu);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //################################### OPTION MENU SELECTED #############################################################
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_delete_post) {
+
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            removePost();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+            builder.setMessage("Bạn muốn xóa phòng trọ này?").setPositiveButton("Xóa", dialogClickListener)
+                    .setNegativeButton("Không", dialogClickListener).show();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void removePost() {
+        db.collection("posts").document(postID)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(PostDetailActivity.this, "Đã xóa phòng trọ", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnCall) {
+            String phoneNumber = tvPhoneNumber.getText().toString();
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+            startActivity(intent);
+        }
     }
 }

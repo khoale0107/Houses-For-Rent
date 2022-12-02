@@ -293,6 +293,7 @@ public class PostActivity extends AppCompatActivity {
         newUser.put("thanhpho", etThanhPho.getText().toString());
         newUser.put("quan", etQuan.getText().toString());
         newUser.put("valid", 0);
+        newUser.put("trangthai", 1);
         newUser.put("images", imageList);
         newUser.put("time", Timestamp.now());
 

@@ -44,13 +44,16 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //check if already signed in
         if (user != null) {
+            setUserInfo();
+
+            //to MainActivity
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
 
-        
         //######################  1. You click this btn ##########################################################################3
         btnLoginWithGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +70,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    
+
+
     //########################################## 2. This pops up #########################################################################
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -88,35 +92,37 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            DocumentReference usersRef = db.collection("users").document(user.getEmail());
-            usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            User.getInstance().setAvatarURL(document.getString("pfp"));
-                            User.getInstance().setDisplayName(document.getString("displayname"));
-                            User.getInstance().setEmail(document.getString("email"));
-                            User.getInstance().setPhoneNumber(document.getString("phone"));
-                        } else {
-                            //######################################## 4. You signed in for the first time ########################################
-                            registerNewUser();
+            //check if user already exists
+            db.collection("users").document(user.getEmail())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    User.getInstance().setPhoneNumber(document.getString("phone"));
+                                    User.getInstance().setDisplayName(document.getString("displayname"));
+                                } else {
+                                    //######################################## 4. You signed in for the first time ########################################
+                                    registerNewUser();
+                                }
+                            } else {
+
+                            }
                         }
-                    } else {
+                    });
 
-                    }
-                }
-            });
-
+            //to MainActivity
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
-
             finish();
         } else {
             // Sign in failed. If response is null the user canceled the sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            Toast.makeText(this,  String.valueOf(response.getError().getErrorCode()), Toast.LENGTH_SHORT).show();
+            if (response != null) {
+                Toast.makeText(this,  String.valueOf(response.getError().getErrorCode()), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -136,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("TAG", "DocumentSnapshot successfully written!");
-                        Toast.makeText(LoginActivity.this, "First time 2222", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "New user", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -145,7 +151,37 @@ public class LoginActivity extends AppCompatActivity {
                         Log.w("TAG", "Error writing document", e);
                     }
                 });
+
+        User.getInstance().setPhoneNumber("");
+        User.getInstance().setDisplayName(user.getDisplayName());
     }
+
+    private void setUserInfo() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        db.collection("users").document(user.getEmail())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String phoneNumber = document.getString("phone");
+                                String displayName = document.getString("displayname");
+
+                                User.getInstance().setPhoneNumber(phoneNumber);
+                                User.getInstance().setDisplayName(displayName);
+
+                            } else {
+                            }
+                        } else {
+
+                        }
+                    }
+                });
+    }
+
 
     @Override
     public void onBackPressed() {
