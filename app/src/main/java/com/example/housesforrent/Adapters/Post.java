@@ -8,7 +8,7 @@ public class Post {
     String thumnailURL;
     String diaChi;
     String owner;
-    Boolean bookMarked;
+    Boolean bookMarked = false;
     int trangThai;
 
     public int getTrangThai() {

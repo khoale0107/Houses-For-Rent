@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
         rvRV.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-
         //load bookmarks
         db.collection("users").document(user.getEmail())
                 .get()
@@ -117,15 +116,15 @@ public class HomeFragment extends Fragment {
                                             doc.getLong("dientich").toString(),
                                             doc.getString("quan") + ", " + doc.getString("thanhpho"),
                                             doc.getString("owner")
-
                                     );
 
-                                    post.setBookMarked(bookmarksList.contains(doc.getId()));
+                                    if (bookmarksList != null) {
+                                        post.setBookMarked(bookmarksList.contains(doc.getId()));
+                                    }
 
                                     postAdapter.postList.add(0, post);
                                     postAdapter.notifyItemInserted(0);
 
-                                    Log.d("", "@@@ " + dc.getDocument().getId());
                                     break;
 
 

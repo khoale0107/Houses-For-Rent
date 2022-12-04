@@ -63,8 +63,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         if (user != null) {
             tvDisplayName.setText(User.getInstance().getDisplayName());
-            tvEmail.setText(user.getEmail());
-            Glide.with(ProfileFragment.this).load(user.getPhotoUrl().toString()).into(ivAvatar);
+            tvEmail.setText(User.getInstance().getEmail());
+            Glide.with(ProfileFragment.this).load(User.getInstance().getAvatarURL()).into(ivAvatar);
             tvPhoneNumber.setText(User.getInstance().getPhoneNumber());
         }
 

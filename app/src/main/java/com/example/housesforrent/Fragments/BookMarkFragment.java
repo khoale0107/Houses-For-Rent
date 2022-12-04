@@ -90,6 +90,9 @@ public class BookMarkFragment extends Fragment {
     }
 
     private void loadPosts() {
+        if (bookmarksList == null) {
+            return;
+        }
         for (String postID : bookmarksList) {
             db.collection("posts").document(postID)
                     .get()
