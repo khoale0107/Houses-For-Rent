@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             setUserInfo();
 
+
             //to MainActivity
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnLogin.setEnabled(false);
                 signIn();
             }
         });
@@ -112,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
+                            btnLogin.setEnabled(true);
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
 
@@ -154,6 +157,11 @@ public class LoginActivity extends AppCompatActivity {
                                 if (document.exists()) {
                                     User.getInstance().setPhoneNumber(document.getString("phone"));
                                     User.getInstance().setDisplayName(document.getString("displayname"));
+
+                                    if (user != null) {
+                                        User.getInstance().setAvatarURL(user.getPhotoUrl().toString());
+                                        User.getInstance().setEmail(user.getEmail());
+                                    }
                                 } else {
                                     //######################################## 4. You signed in for the first time ########################################
                                     registerNewUser();
@@ -204,6 +212,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
         User.getInstance().setPhoneNumber("");
+        User.getInstance().setEmail(user.getEmail());
+        User.getInstance().setAvatarURL(user.getPhotoUrl().toString());
         User.getInstance().setDisplayName(user.getDisplayName());
     }
 
@@ -218,11 +228,18 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String phoneNumber = document.getString("phone");
+                                String phone = document.getString("phone");
                                 String displayName = document.getString("displayname");
 
-                                User.getInstance().setPhoneNumber(phoneNumber);
+                                User.getInstance().setPhoneNumber(phone);
                                 User.getInstance().setDisplayName(displayName);
+
+                                if (user != null) {
+                                    if (user.getPhotoUrl() != null) {
+                                        User.getInstance().setAvatarURL(user.getPhotoUrl().toString());
+                                    }
+                                    User.getInstance().setEmail(user.getEmail());
+                                }
 
                             } else {
                             }

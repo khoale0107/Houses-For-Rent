@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.example.housesforrent.Adapters.Post;
 import com.example.housesforrent.Adapters.PostAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.slider.RangeSlider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +54,7 @@ public class SearchActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
-    List<String> bookmarksList;
+    List<String> bookmarksList = new ArrayList<>();
 
     int fromPrice = 0;
     int toPrice = 10000000;
@@ -76,6 +78,8 @@ public class SearchActivity extends AppCompatActivity {
 
         rvRV = findViewById(R.id.rvRV);
         rvRV.setLayoutManager(new LinearLayoutManager(this));
+        postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList, SearchActivity.this);
+        rvRV.setAdapter(postAdapter);
 
 
         discreteRangeSlider.addOnChangeListener(new RangeSlider.OnChangeListener() {
@@ -91,21 +95,21 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        etThanhPho.setOnFocusChangeListener(onFocusChangeListener);
-        etThanhPho.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogSelectCity.show();
-            }
-        });
-
-        etQuan.setOnFocusChangeListener(onFocusChangeListener);
-        etQuan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSelectDistrictDialog();
-            }
-        });
+//        etThanhPho.setOnFocusChangeListener(onFocusChangeListener);
+//        etThanhPho.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialogSelectCity.show();
+//            }
+//        });
+//
+//        etQuan.setOnFocusChangeListener(onFocusChangeListener);
+//        etQuan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showSelectDistrictDialog();
+//            }
+//        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +119,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void loadBookMarks() {
+    public void loadBookMarks() {
         //load bookmarks
         db.collection("users").document(user.getEmail())
                 .get()
@@ -126,9 +130,8 @@ public class SearchActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 bookmarksList = (List<String>) document.get("bookmarks");
+                                postAdapter.setBookmarksList(bookmarksList);
 
-                                postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList);
-                                rvRV.setAdapter(postAdapter);
                             } else {
 
                             }
@@ -141,16 +144,20 @@ public class SearchActivity extends AppCompatActivity {
 
     //############################# Search ##############################################
     private void searchAndLoad() {
+        postAdapter.postList.clear();
+        postAdapter.notifyDataSetChanged();
+
         db.collection("posts")
                 .whereEqualTo("trangthai", 1)
-//                .whereGreaterThanOrEqualTo("gia", fromPrice)
-//                .whereLessThanOrEqualTo("gia", 10000000)
+                .whereGreaterThanOrEqualTo("gia", fromPrice)
+                .whereLessThanOrEqualTo("gia", toPrice)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot doc : task.getResult()) {
+
                                 Post post = new Post(
                                         doc.getId(),
                                         doc.getString("tieude"),
@@ -158,16 +165,33 @@ public class SearchActivity extends AppCompatActivity {
                                         doc.getLong("dientich").toString(),
                                         doc.getString("quan") + ", " + doc.getString("thanhpho"),
                                         doc.getString("owner")
+                                        
                                 );
 
-                                post.setBookMarked(bookmarksList.contains(doc.getId()));
+                                if (bookmarksList != null) {
+                                    post.setBookMarked(bookmarksList.contains(doc.getId()));
+                                }
 
                                 postAdapter.postList.add(0, post);
-//                                postAdapter.notifyItemInserted(0);
+                                postAdapter.notifyItemInserted(0);
                             }
-                            postAdapter.notifyDataSetChanged();
-                        } else {
+//                            postAdapter.notifyDataSetChanged();
 
+                            //load thumbnail
+                            for (Post p : postAdapter.postList) {
+                                StorageReference imageRef = storageRef.child("post-resources/" + p.getID() + "/" + 0);
+                                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        p.setThumnailURL(uri.toString());
+                                        postAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
+                        } else {
+                            Log.d("@@@", task.getException().getMessage());
+                            Toast.makeText(SearchActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

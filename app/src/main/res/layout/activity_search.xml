@@ -48,46 +48,6 @@
                 android:textSize="20sp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thành phố"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                />
-
-            <EditText
-                android:id="@+id/etThanhPho"
-                android:inputType="text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="#309C9C9C"
-                android:hint="Chọn thành phố"
-                android:padding="10dp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quận"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                />
-
-            <EditText
-                android:id="@+id/etQuan"
-                android:inputType="text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="#309C9C9C"
-                android:hint="Chọn quận"
-                android:padding="10dp"
-                />
-
             <Button
                 android:id="@+id/btnSearch"
                 android:layout_width="match_parent"

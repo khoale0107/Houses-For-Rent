@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
                         if (document.exists()) {
                             bookmarksList = (List<String>) document.get("bookmarks");
 
-                            postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList);
+                            postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList, getContext());
                             rvRV.setAdapter(postAdapter);
 
                             //load content
@@ -82,10 +82,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
         });
-
-
-
-
 
         return view;
     }

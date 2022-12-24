@@ -74,7 +74,7 @@ public class MyPostsActivity extends AppCompatActivity {
                                             doc.getString("owner")
                                     );
 
-                                    post.setTrangThai(Integer.parseInt(doc.getLong("trangthai").toString()));
+                                    post.setTrangThai(Integer.parseInt(doc.get("trangthai").toString()));
 
                                     postAdapter.postList.add(0, post);
                                     postAdapter.notifyItemInserted(0);

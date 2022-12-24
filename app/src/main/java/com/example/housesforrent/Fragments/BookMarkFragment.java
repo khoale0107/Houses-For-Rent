@@ -72,7 +72,7 @@ public class BookMarkFragment extends Fragment {
                             if (document.exists()) {
                                 bookmarksList = (List<String>) document.get("bookmarks");
 
-                                postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList);
+                                postAdapter = new PostAdapter(new ArrayList<>(), bookmarksList, getContext());
                                 rvRV.setAdapter(postAdapter);
 
                                 //load posts
@@ -90,9 +90,8 @@ public class BookMarkFragment extends Fragment {
     }
 
     private void loadPosts() {
-        if (bookmarksList == null) {
-            return;
-        }
+        if (bookmarksList == null) return;
+
         for (String postID : bookmarksList) {
             db.collection("posts").document(postID)
                     .get()
@@ -126,7 +125,6 @@ public class BookMarkFragment extends Fragment {
 //                                    postAdapter.notifyDataSetChanged();
                                     postAdapter.notifyItemInserted(0);
                                     layoutManager.scrollToPositionWithOffset(0, 0);
-
                                 }
                             });
 
@@ -141,17 +139,19 @@ public class BookMarkFragment extends Fragment {
             });
         }
 
+
+
         //load Thumnail
-        for (Post p : postAdapter.postList) {
-            StorageReference imageRef = storageRef.child("post-resources/" + p.getID() + "/" + 0);
-            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    p.setThumnailURL(uri.toString());
-                    postAdapter.notifyDataSetChanged();
-                }
-            });
-        }
+//        for (Post p : postAdapter.postList) {
+//            StorageReference imageRef = storageRef.child("post-resources/" + p.getID() + "/" + 0);
+//            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(Uri uri) {
+//                    p.setThumnailURL(uri.toString());
+//                    postAdapter.notifyDataSetChanged();
+//                }
+//            });
+//        }
     }
 
 }

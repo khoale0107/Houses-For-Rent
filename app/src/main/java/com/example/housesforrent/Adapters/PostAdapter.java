@@ -18,6 +18,7 @@ import com.example.housesforrent.MyUtilities.DownloadImageFromInternet;
 import com.example.housesforrent.MyUtilities.MyToast;
 import com.example.housesforrent.PostDetailActivity;
 import com.example.housesforrent.R;
+import com.example.housesforrent.SearchActivity;
 import com.example.housesforrent.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,11 +32,16 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public List<Post> postList;
     public List<String> bookmarksList;
-//    Context context;
+    Context context;
 
-    public PostAdapter(List<Post> postList, List<String> bookmarksList) {
+
+    public void setBookmarksList(List<String> bookmarksList) {
+        this.bookmarksList = bookmarksList;
+    }
+
+    public PostAdapter(List<Post> postList, List<String> bookmarksList, Context context) {
         this.postList = postList;
-//        this.context = context;
+        this.context = context;
         this.bookmarksList = bookmarksList;
     }
 
@@ -76,6 +82,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.btnBookMark.setImageResource(R.drawable.ic_baseline_bookmark_added_24);
         else
             holder.btnBookMark.setImageResource(R.drawable.ic_outline_bookmark_add_24);
+
+
         //toggle bookmark
         holder.btnBookMark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +119,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                     MyToast.toast(holder.itemView.getContext(), "Đã xóa khỏi Bookmark");
                                 }
                             });
+                }
+
+                if (context instanceof SearchActivity) {
+                    ((SearchActivity) context).loadBookMarks();
                 }
             }
         });

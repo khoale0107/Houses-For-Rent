@@ -10,9 +10,8 @@
     android:padding="20dp"
     >
 
-
-
     <TextView
+        android:enabled="false"
         android:id="@+id/signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +25,7 @@
 
 
     <EditText
+        android:enabled="false"
         android:id="@+id/etEmail"
         android:inputType="text"
         android:layout_width="match_parent"
@@ -33,12 +33,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:background="#30E6E5E5"
-        android:textColorHint="@color/white"
+        android:textColorHint="#C3C3C3"
         android:hint="Email"
         android:padding="14dp"
         />
 
     <EditText
+        android:enabled="false"
         android:id="@+id/etPassword"
         android:inputType="textPassword"
         android:layout_width="match_parent"
@@ -47,21 +48,28 @@
         android:layout_marginBottom="16dp"
         android:background="#30E6E5E5"
         android:hint="Mật khẩu"
-        android:textColorHint="@color/white"
+        android:textColorHint="#C3C3C3"
         android:padding="14dp"
         />
 
     <Button
+        android:enabled="false"
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đăng Nhập"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="#C3C3C3"
         android:padding="14dp"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
     <Button
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:id="@+id/btnLoginWithGoogle"
         android:drawableLeft="@drawable/google"

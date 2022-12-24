@@ -75,8 +75,15 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.ViewHolder
         }
         else if (post.getTrangThai() == STATUS_RENTED) {
             holder.tvStatus.setText("Đã cho thuê");
-            holder.tvStatus.setTextColor(Color.parseColor("#de7214"));
+            holder.tvStatus.setTextColor(Color.RED);
             holder.btnCancelRent.setVisibility(View.VISIBLE);
+            holder.btnDeletePost.setVisibility(View.GONE);
+            holder.btnSetRented.setVisibility(View.GONE);
+        }
+        else if (post.getTrangThai() == STATUS_WAITING) {
+            holder.tvStatus.setText("Đang chờ duyệt");
+            holder.tvStatus.setTextColor(Color.parseColor("#de7214"));
+            holder.btnCancelRent.setVisibility(View.GONE);
             holder.btnDeletePost.setVisibility(View.GONE);
             holder.btnSetRented.setVisibility(View.GONE);
         }

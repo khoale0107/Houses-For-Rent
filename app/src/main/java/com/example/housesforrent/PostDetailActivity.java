@@ -81,6 +81,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         postID = intent.getStringExtra("postID");
         ownerEmail = intent.getStringExtra("owner");
 
+        if (ownerEmail.equals(User.getInstance().getEmail())) {
+            btnPhoneCall.setVisibility(View.GONE);
+        }
+
         postDetailImagesViewPagerAdapter = new PostDetailImagesViewPagerAdapter(PostDetailActivity.this, imageURLs);
         mViewPager = findViewById(R.id.vpViewPager);
         mViewPager.setAdapter(postDetailImagesViewPagerAdapter);
@@ -133,6 +137,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     //load owner info
     private void loadOwnerInfo() {
         DocumentReference docRef = db.collection("users").document(ownerEmail);
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
